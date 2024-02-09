@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  arc380-ros:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: arc380-ros:v1.0.0
+    container_name: arc380-ros
+    volumes:
+      - ./ros_packages:/root/arc380_ws/src
+    networks:
+      - ros-network
+    depends_on:
+      - novnc
+    tty: true
+    stdin_open: true
+
+  # ros-gazebo:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: ros-gazebo:v1.0.0
+  #   container_name: ros-gazebo
+  #   environment:
+  #     - ROS_HOSTNAME=ros-gazebo
+  #     - ROS_MASTER_URI=http://ros-master:11311
+  #   volumes:
+  #     - ./ros_packages:/root/catkin_ws/src
+  #   ports:
+  #     - "11345:11345" # Gazebo
+  #   networks:
+  #     - ros-network
+  #   depends_on:
+  #     - novnc
+  #     - ros-master
+  #   command:
+  #     -rosrun gazebo_ros gazebo
+
+  # rviz:
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   image: ros-gazebo:v1.0.0
+  #   container_name: rviz
+  #   environment:
+  #     - ROS_HOSTNAME=rviz
+  #     - ROS_MASTER_URI=http://ros-master:11311
+  #   volumes:
+  #     - ./ros_packages:/root/catkin_ws/src
+  #   networks:
+  #     - ros-network
+  #   depends_on:
+  #     - novnc
+  #     - ros-master
+  #   command:
+  #     -roslaunch turtlebot3_gazebo turtlebot3_world.launch
+
+  novnc:
+    image: theasp/novnc:latest
+    container_name: novnc
+    environment:
+      - DISPLAY_WIDTH=1920
+      - DISPLAY_HEIGHT=900
+      - RUN_XTERM=no
+    ports:
+      - "8080:8080" # noVNC Web interface
+    networks:
+      - ros-network
+
+networks:
+  ros-network:
+    driver: bridge
