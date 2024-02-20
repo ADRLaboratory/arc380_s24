@@ -191,3 +191,6 @@ include_directories(
 add_executable(file_server src/file_server.cpp)
 target_link_libraries(file_server ${catkin_LIBRARIES})
 add_dependencies(file_server file_server_gencpp)
+
+install(DIRECTORY launch src srv
+  DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
