@@ -255,3 +255,5 @@ if __name__ == "__main__":
 
     # Uncomment to reset the Gazebo world
     # reset_gazebo_world()
+
+    pass
